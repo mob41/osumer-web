@@ -1,0 +1,62 @@
+.bg-orange {
+    background-color: #ff9900;
+}
+
+.filter-list .add-filter-btn span {
+    display: none;
+}
+
+.filter-list .add-filter-btn:hover span {
+    display: inline;
+}
+
+.search-panel {
+    padding: 8px;
+    margin-bottom: 0px;
+}
+
+.map-list .col-sm-2 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.beatmap-card {
+    margin: 0px;
+    max-height: 180px;
+    border: unset;
+    border-radius: unset;
+}
+
+.beatmap-card .card-img {
+    object-fit: cover;
+    border-radius: unset;
+    min-width: 160px;
+    min-height: 120px;
+}
+
+.beatmap-card .card-img-overlay {
+    background-color: rgba(128, 128, 128, 0.8);
+}
+
+.beatmap-card:hover div {
+    background-color: unset;
+    opacity: 0.4;
+}
+
+.beatmap-card div {
+    display: block;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.footer {
+    padding-top: 8px;
+    padding-bottom: 0px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
