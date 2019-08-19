@@ -54,8 +54,17 @@ function makeQuery(keywords = false, filters = false, page = 1) {
             totalPages = data.totalPages;
             updateUi();
         },
-        error: function () {
-            alert("Error query");
+        error: function (xhr, status, error) {
+            var html =
+                "<div class=\"card text-white bg-danger mb-3\" style=\"margin: 30px;\">" +
+                "  <div class=\"card-header\"><i class=\"fas fa-times\"></i> Error</div>" +
+                "  <div class=\"card-body\">" +
+                "    <h5 class=\"card-title\">Connection Error</h5>" +
+                "    <p class=\"card-text\">osumerWeb could not connect to target server. <br /><br /><b>Status Code:</b> " + xhr.status + " " + status + "<br /><b>Message:</b> " + error + "</p>" +
+                "  </div>" +
+                "</div>";
+            $(".map-list").html(html);
+            $(".map-list").addClass("justify-content-center");
         }
     });
 }
