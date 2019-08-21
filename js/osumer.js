@@ -6,10 +6,22 @@ var totalPages = -1;
 var audioPreview;
 var paras = {};
 
+var beatmapAudioPreviewFunc = function () {
+    var pause = $(this).hasClass("fa-pause");
+
+    pausePreview();
+    resetPreviewIcons();
+
+    if (!pause) {
+        playPreview($(this).parent().parent().attr("song-id"));
+        $(this).addClass("fa-pause");
+        $(this).removeClass("fa-play");
+    }
+};
+
 $(document).ready(function () {
     adjustMapListMargin();
     processUrl();
-    search();
 });
 
 $(window).resize(function () {
@@ -21,6 +33,8 @@ function adjustMapListMargin() {
     var fh = $(".footer").height();
     $(".map-list").css("margin-top", hh);
     $(".map-list").css("margin-bottom", fh);
+    $(".view-song").css("margin-top", hh);
+    $(".view-song").css("height", $(window).height() - hh);
     $(".loading-overlay").css("margin-top", hh);
 }
 
@@ -44,9 +58,72 @@ function pausePreview() {
 }
 
 function resetPreviewIcons() {
-    var running = $(".beatmap-audio-preview .fa-pause");
+    var running = $(".beatmap-audio-preview.fa-pause");
     running.addClass("fa-play");
     running.removeClass("fa-pause");
+}
+
+function getSong(id) {
+    for (var result of results) {
+        if (result.id == id) {
+            return result;
+        }
+    }
+    return false;
+}
+
+function returnToSearch() {
+    delete paras["id"];
+    forwardUrl();
+
+    $(".view-song").fadeOut(500, function () {
+        $(".view-song").html("");
+    });
+    $(".search-panel").fadeIn(500, function () {
+        adjustMapListMargin();
+        $(".map-list").fadeIn(250);
+    });
+    $(".footer").fadeIn(500);
+
+}
+
+function viewSong(id) {
+    paras["id"] = id;
+    forwardUrl();
+
+    $(".search-panel").fadeOut(500);
+    $(".map-list").fadeOut(500);
+    $(".footer").fadeOut(500);
+
+    $(".view-song").html("");
+
+    var song = getSong(id);
+
+    var html =
+        "<div class=\"card view-song-card\" song-id=\"" + song.id + "\">" +
+        "    <img src=\"https://assets.ppy.sh/beatmaps/" + song.id + "/covers/card.jpg\" class=\"card-img-top\" alt=\"" + song.title + "\">" +
+        "    <div class=\"card-body\">" +
+        "        <h5 class=\"card-title\">" + song.artist + " - " + song.title + "</h5>" +
+        "        <p class=\"card-text\"><span class=\"result-map-tags\">";
+
+    for (var tag of song.tags) {
+        html += "<span class=\"badge badge-secondary\">" + tag + "</span> ";
+    }
+
+    html +=
+        "</span><\/p>" +
+        "    <\/div>" +
+        "    <div class=\"view-song-toolbar\"><i class=\"view-song-back fas fa-arrow-left fa-2x\"></i> <i class=\"beatmap-audio-preview fas fa-play fa-2x\"></i></div>" +
+        "<\/div>";
+    $(".view-song").html(html);
+
+    setTimeout(function () {
+        adjustMapListMargin();
+        $(".view-song").fadeTo(500, 1);
+
+        $(".view-song-toolbar .beatmap-audio-preview").on("click", beatmapAudioPreviewFunc);
+        $(".view-song-toolbar .view-song-back").on("click", returnToSearch);
+    }, 600);
 }
 
 $("#keywords").keypress(function (e) {
@@ -78,12 +155,23 @@ function processUrl() {
 
     var keywords = paras["q"];
     var page = paras["p"];
+    var id = paras["id"];
     if (keywords) {
-        if (!Number.isInteger(page)) {
+        if (Number.isNaN(page)) {
             page = 1;
         }
         $("#keywords").val(keywords);
-        makeQuery(keywords, page);
+
+        var success = false;
+        if (id) {
+            success = function () {
+                viewSong(paras["id"]);
+            }
+        }
+
+        makeQuery(keywords, false, page, success);
+    } else {
+        search();
     }
 }
 
@@ -100,7 +188,7 @@ function forwardUrl() {
     window.history.pushState({}, "osumerWeb", window.location.origin + window.location.pathname + "?" + queryStr);
 }
 
-function makeQuery(keywords = false, filters = false, page = 1) {
+function makeQuery(keywords = false, filters = false, page = 1, success = false) {
     $(this).css("display", "block");
     $(".loading-overlay").fadeTo(500, 1);
 
@@ -129,6 +217,9 @@ function makeQuery(keywords = false, filters = false, page = 1) {
             $(".loading-overlay").fadeTo(500, 0, function () {
                 $(this).css("display", "none");
             });
+            if (success) {
+                success();
+            }
         },
         error: function (xhr, status, error) {
             $(".loading-overlay").fadeTo(500, 0, function () {
@@ -169,7 +260,7 @@ function updateUi() {
         html +=
             "</span><\/p>" +
             "        <\/div>" +
-            "        <div class=\"beatmap-audio-preview\"><i class=\"fas fa-play fa-lg\"></i></div>" +
+            "        <div class=\"beatmap-card-toolbar\"><i class=\"beatmap-audio-preview fas fa-play fa-lg\"></i></div>" +
             "    <\/div>" +
             "<\/div>";
         $(".map-list").append(html);
@@ -179,18 +270,11 @@ function updateUi() {
         $(this).attr("src", "https://via.placeholder.com/160x120");
     });
 
-    $(".beatmap-audio-preview i").on("click", function () {
-        var pause = $(this).hasClass("fa-pause");
-
-        pausePreview();
-        resetPreviewIcons();
-
-        if (!pause) {
-            playPreview($(this).parent().parent().attr("song-id"));
-            $(this).addClass("fa-pause");
-            $(this).removeClass("fa-play");
-        }
+    $(".beatmap-card .card-img-overlay").on("click", function () {
+        viewSong($(this).parent().attr("song-id"));
     });
+
+    $(".beatmap-audio-preview").on("click", beatmapAudioPreviewFunc);
 
     $(".pagination").html("");
 

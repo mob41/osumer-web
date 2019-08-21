@@ -43,6 +43,32 @@
     opacity: 0.4;
 }
 
+.beatmap-card .beatmap-card-toolbar {
+    position: absolute;
+    left: 16px;
+    bottom: 8px;
+}
+
+.view-song-card {
+    margin: 0px;
+    width: 100%;
+    height: inherit;
+}
+
+.view-song-card .card-img-top {
+    object-fit: cover;
+}
+
+.view-song-card .view-song-toolbar {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+}
+
+.view-song-toolbar i {
+    margin-right: 16px;
+}
+
 .header {
     position: fixed;
     top: 0;
@@ -77,8 +103,7 @@
     height: 3rem;
 }
 
-.beatmap-audio-preview {
-    position: absolute;
-    left: 16px;
-    bottom: 8px;
+.view-song {
+    display: none;
+    opacity: 0;
 }
