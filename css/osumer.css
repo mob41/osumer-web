@@ -38,13 +38,9 @@
     background-color: rgba(128, 128, 128, 0.6);
 }
 
-.beatmap-card:hover div {
+.beatmap-card:hover .card-img-overlay {
     background-color: unset;
     opacity: 0.4;
-}
-
-.beatmap-card div {
-    display: block;
 }
 
 .header {
@@ -79,4 +75,10 @@
 .loading-overlay .spinner-border {
     width: 3rem;
     height: 3rem;
+}
+
+.beatmap-audio-preview {
+    position: absolute;
+    left: 16px;
+    bottom: 8px;
 }

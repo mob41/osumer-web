@@ -3,10 +3,12 @@ var endpoint = "https://api.osumer.ml/query";
 var results = [];
 var currentPage = 1;
 var totalPages = -1;
+var audioPreview;
+var paras = {};
 
 $(document).ready(function () {
     adjustMapListMargin();
-    processHash();
+    processUrl();
     search();
 });
 
@@ -22,9 +24,30 @@ function adjustMapListMargin() {
     $(".loading-overlay").css("margin-top", hh);
 }
 
-$(window).on("hashchange", function () {
-    processHash();
-});
+function playPreview(id) {
+    if (audioPreview) {
+        audioPreview.pause();
+    }
+    audioPreview = new Audio("https://b.ppy.sh/preview/" + id + ".mp3");
+    audioPreview.volume = 0;
+    audioPreview.play();
+    $(audioPreview).animate({ volume: 1 }, 500);
+    audioPreview.onended = function () {
+        resetPreviewIcons();
+    };
+}
+
+function pausePreview() {
+    if (audioPreview) {
+        audioPreview.pause();
+    }
+}
+
+function resetPreviewIcons() {
+    var running = $(".beatmap-audio-preview .fa-pause");
+    running.addClass("fa-play");
+    running.removeClass("fa-pause");
+}
 
 $("#keywords").keypress(function (e) {
     if (e.which === 13) {
@@ -37,16 +60,56 @@ $("#search-btn").on("click", function () {
     search();
 });
 
-function processHash() {
-    var mep = getParameter("ep");
+function processUrl() {
+    var ps = location.search.substr(1).split("&");
+    var values;
+    for (var p of ps) {
+        values = p.split("=");
+        if (!values[0] || values[0] === "") {
+            continue;
+        }
+        paras[values[0]] = decodeURIComponent(values[1]);
+    }
+
+    var mep = paras["ep"];
     if (mep) {
         endpoint = mep;
     }
+
+    var keywords = paras["q"];
+    var page = paras["p"];
+    if (keywords) {
+        if (!Number.isInteger(page)) {
+            page = 1;
+        }
+        $("#keywords").val(keywords);
+        makeQuery(keywords, page);
+    }
+}
+
+function forwardUrl() {
+    var queryStr = "";
+    var i = 0;
+    for (var key in paras) {
+        if (i !== 0) {
+            queryStr += "&";
+        }
+        queryStr += key + "=" + encodeURIComponent(paras[key]);
+        i++;
+    }
+    window.history.pushState({}, "osumerWeb", window.location.origin + window.location.pathname + "?" + queryStr);
 }
 
 function makeQuery(keywords = false, filters = false, page = 1) {
     $(this).css("display", "block");
     $(".loading-overlay").fadeTo(500, 1);
+
+    if (keywords && keywords !== "") {
+        paras["q"] = keywords;
+        paras["p"] = page;
+        forwardUrl();
+    }
+
     var queryStr = "?i=48&p=" + page;
     if (keywords) {
         queryStr += "&k=" + encodeURIComponent(keywords);
@@ -68,6 +131,11 @@ function makeQuery(keywords = false, filters = false, page = 1) {
             });
         },
         error: function (xhr, status, error) {
+            $(".loading-overlay").fadeTo(500, 0, function () {
+                $(this).css("display", "none");
+            });
+            $(".map-list").css("opacity", 0);
+            $(".map-list").fadeTo(500, 1);
             var html =
                 "<div class=\"card text-white bg-danger mb-3\" style=\"margin: 30px;\">" +
                 "  <div class=\"card-header\"><i class=\"fas fa-times\"></i> Error</div>" +
@@ -88,7 +156,7 @@ function updateUi() {
     for (var result of results) {
         html =
             "<div class=\"col-sm-2\">" +
-            "    <div class=\"card bg-dark text-white beatmap-card\">" +
+            "    <div class=\"card bg-dark text-white beatmap-card\" song-id=\"" + result.id + "\">" +
             "        <img src=\"https://b.ppy.sh/thumb/" + result.id + "l.jpg\" class=\"card-img\" alt=\"" + result.title + "\">" +
             "        <div class=\"card-img-overlay\">" +
             "            <h5 class=\"card-title\">" + result.artist + " - " + result.title + "</h5>" +
@@ -101,10 +169,28 @@ function updateUi() {
         html +=
             "</span><\/p>" +
             "        <\/div>" +
+            "        <div class=\"beatmap-audio-preview\"><i class=\"fas fa-play fa-lg\"></i></div>" +
             "    <\/div>" +
             "<\/div>";
         $(".map-list").append(html);
     }
+
+    $("img").on("error", function () {
+        $(this).attr("src", "https://via.placeholder.com/160x120");
+    });
+
+    $(".beatmap-audio-preview i").on("click", function () {
+        var pause = $(this).hasClass("fa-pause");
+
+        pausePreview();
+        resetPreviewIcons();
+
+        if (!pause) {
+            playPreview($(this).parent().parent().attr("song-id"));
+            $(this).addClass("fa-pause");
+            $(this).removeClass("fa-play");
+        }
+    });
 
     $(".pagination").html("");
 
@@ -179,13 +265,15 @@ function updateUi() {
 }
 
 function search(page = 1) {
-    makeQuery($("#keywords").val(), false, page);
+    var keyword = $("#keywords");
+    keyword.blur();
+    makeQuery(keyword.val(), false, page);
 }
 
 function getParameter(parameterName) {
     var result = null,
         tmp = [];
-    location.hash
+    location.search
         .substr(1)
         .split("&")
         .forEach(function (item) {
