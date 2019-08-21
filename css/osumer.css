@@ -47,16 +47,23 @@
     position: absolute;
     left: 16px;
     bottom: 8px;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .view-song-card {
     margin: 0px;
     width: 100%;
     height: inherit;
+    border: unset;
+    border-radius: unset;
 }
 
 .view-song-card .card-img-top {
     object-fit: cover;
+    min-height: 100px;
+    max-height: 300px;
+    border-radius: unset;
 }
 
 .view-song-card .view-song-toolbar {
@@ -67,6 +74,8 @@
 
 .view-song-toolbar i {
     margin-right: 16px;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .header {
