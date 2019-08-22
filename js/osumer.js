@@ -28,13 +28,45 @@ $(window).resize(function () {
     adjustMapListMargin();
 });
 
+$(".view-song-footer .col-sm-3").on("click", function () {
+    var id = paras["id"];
+    var action = $(this).attr("song-action");
+    if (action === "download") {
+        if (!window["osuForumLoggedIn"]) {
+            $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Downloading from osu! forum</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+            $(".modal-body").html("Please confirm you have logged into osu! forum properly. Otherwise, you will not be able to download directly with this link.");
+            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuForumLoggedIn'] = true; window.open('https://osu.ppy.sh/beatmapsets/" + id + "/download')\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/')\">Login right now</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+            $(".modal").modal({ backdrop: 'static', keyboard: false });
+        } else {
+            window.open("https://osu.ppy.sh/beatmapsets/" + id + "/download");
+        }
+    } else if (action === "queue") {
+        $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Not implemented</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+        $(".modal-body").html("This will be soon available when osumer 2.0.1 released, that implements WebSockets in the application to allow external connections.");
+        $(".modal-footer").html("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+        $(".modal").modal();
+    } else if (action === "osud") {
+        if (!window["osuDirectAvailable"]) {
+            $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Download using osu!direct</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+            $(".modal-body").html("Please confirm you have subscribed osu!supporter to use this feature. Otherwise, you will be automatically redirected back to the beatmap page instead.");
+            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuDirectAvailable'] = true; window.open('osu://dl/" + id + "')\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/home/support')\">Subscribe</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+            $(".modal").modal({ backdrop: 'static', keyboard: false });
+        } else {
+            window.open("osu://dl/" + id);
+        }
+    } else if (action === "page") {
+        window.open("https://osu.ppy.sh/s/" + id);
+    }
+});
+
 function adjustMapListMargin() {
     var hh = $(".header").height();
     var fh = $(".footer").height();
+    var vsfh = $(".view-song-footer").height();
     $(".map-list").css("margin-top", hh);
     $(".map-list").css("margin-bottom", fh);
     $(".view-song").css("margin-top", hh);
-    $(".view-song").css("height", $(window).height() - hh);
+    $(".view-song").css("height", $(window).height() - hh - vsfh);
     $(".loading-overlay").css("margin-top", hh);
 }
 
@@ -76,6 +108,7 @@ function returnToSearch() {
     delete paras["id"];
     forwardUrl();
 
+    $(".view-song-footer").fadeTo(500, 0);
     $(".view-song").fadeOut(500, function () {
         $(".view-song").html("");
     });
@@ -120,6 +153,7 @@ function viewSong(id) {
     setTimeout(function () {
         adjustMapListMargin();
         $(".view-song").fadeTo(500, 1);
+        $(".view-song-footer").fadeTo(500, 1);
 
         $(".view-song-toolbar .beatmap-audio-preview").on("click", beatmapAudioPreviewFunc);
         $(".view-song-toolbar .view-song-back").on("click", returnToSearch);
