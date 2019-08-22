@@ -48,11 +48,11 @@ $(".view-song-footer .col-sm-3").on("click", function () {
     } else if (action === "osud") {
         if (!window["osuDirectAvailable"]) {
             $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Download using osu!direct</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
-            $(".modal-body").html("Please confirm you have subscribed osu!supporter to use this feature. Otherwise, you will be automatically redirected back to the beatmap page instead.");
-            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuDirectAvailable'] = true; window.open('osu://dl/" + id + "')\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/home/support')\">Subscribe</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+            $(".modal-body").html("Please confirm you have subscribed osu!supporter, or properly set up osumer2 as default browser to use this feature. Otherwise, you will be automatically redirected back to the beatmap page instead.");
+            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuDirectAvailable'] = true; window.location = 'osu://dl/" + id + "'\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/home/support')\">Subscribe</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
             $(".modal").modal({ backdrop: 'static', keyboard: false });
         } else {
-            window.open("osu://dl/" + id);
+            window.location = "osu://dl/" + id;
         }
     } else if (action === "page") {
         window.open("https://osu.ppy.sh/s/" + id);
