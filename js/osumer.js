@@ -35,10 +35,10 @@ $(".view-song-footer .col-sm-3").on("click", function () {
         if (!window["osuForumLoggedIn"]) {
             $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Downloading from osu! forum</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
             $(".modal-body").html("Please confirm you have logged into osu! forum properly. Otherwise, you will not be able to download directly with this link.");
-            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuForumLoggedIn'] = true; window.open('https://osu.ppy.sh/beatmapsets/" + id + "/download')\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/')\">Login right now</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+            $(".modal-footer").html("<button type=\"button\" class=\"btn btn-success\" onclick=\"window['osuForumLoggedIn'] = true; window.location = 'https://osu.ppy.sh/beatmapsets/" + id + "/download'\" data-dismiss=\"modal\">Confirm</button> <button type=\"button\" class=\"btn btn-warning\" onclick=\"window.open('https://osu.ppy.sh/')\">Login right now</button> <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
             $(".modal").modal({ backdrop: 'static', keyboard: false });
         } else {
-            window.open("https://osu.ppy.sh/beatmapsets/" + id + "/download");
+            window.location = "https://osu.ppy.sh/beatmapsets/" + id + "/download";
         }
     } else if (action === "queue") {
         $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Not implemented</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
