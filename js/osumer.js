@@ -22,10 +22,28 @@ var beatmapAudioPreviewFunc = function () {
 $(document).ready(function () {
     adjustMapListMargin();
     processUrl();
+    $(".info-download,.info-release").click(function () {
+        window.open("https://github.com/mob41/osumer/releases/latest");
+    });
 });
 
 $(window).resize(function () {
     adjustMapListMargin();
+});
+
+var infoHidden = false;
+
+$(window).on("scroll", function () {
+    if (!infoHidden) {
+        infoHidden = true;
+        $(".osumer-info").css("display", "none");
+        $(".search-panel").css("display", "block");
+        $(".footer").css("display", "block");
+        $(".loading-spinner").css("display", "block");
+        $(".loading-spinner").css("opacity", 1);
+        $(".loading-overlay").fadeOut(500);
+        adjustMapListMargin();
+    }
 });
 
 $(".view-song-footer .col-sm-3").on("click", function () {
@@ -248,9 +266,14 @@ function makeQuery(keywords = false, filters = false, page = 1, success = false)
             currentPage = data.currentPage;
             totalPages = data.totalPages;
             updateUi();
-            $(".loading-overlay").fadeTo(500, 0, function () {
-                $(this).css("display", "none");
-            });
+            if (infoHidden) {
+                $(".loading-overlay").fadeTo(500, 0, function () {
+                    $(this).css("display", "none");
+                });
+            } else {
+                $(".loading-spinner").fadeTo(500, 0);
+            }
+            
             if (success) {
                 success();
             }
