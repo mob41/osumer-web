@@ -25,6 +25,10 @@ $(document).ready(function () {
     $(".info-download,.info-release").click(function () {
         window.open("https://github.com/mob41/osumer/releases/latest");
     });
+    $(".modal-header").html("<h5 class=\"modal-title\" id=\"modalLabel\">Notice</h5><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+    $(".modal-body").html("<p>\"Search Maps\" is in alpha development stage. There are only a few amount of song results, and many features are not available currently. If you experience problems or want to make a feature request, visit <a href=\"https://github.com/mob41/osumer-web/issues/new\" target=\"_blank\">osumer-web Issue Tracker</a></p>");
+    $(".modal-footer").html("<button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>");
+    $(".modal").modal();
 });
 
 $(window).resize(function () {
