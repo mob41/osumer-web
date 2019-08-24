@@ -89,6 +89,7 @@ function adjustMapListMargin() {
     $(".map-list").css("margin-bottom", fh);
     $(".view-song").css("margin-top", hh);
     $(".view-song").css("height", $(window).height() - hh - vsfh);
+    $(".osumer-info").css("height", $(window).height() - $(".header nav").outerHeight());
     $(".loading-overlay").css("margin-top", hh);
 }
 
