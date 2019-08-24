@@ -35,16 +35,20 @@ var infoHidden = false;
 
 $(window).on("scroll", function () {
     if (!infoHidden) {
-        infoHidden = true;
-        $(".osumer-info").css("display", "none");
-        $(".search-panel").css("display", "block");
-        $(".footer").css("display", "block");
-        $(".loading-spinner").css("display", "block");
-        $(".loading-spinner").css("opacity", 1);
-        $(".loading-overlay").fadeOut(500);
-        adjustMapListMargin();
+        hideInfo();
     }
 });
+
+function hideInfo() {
+    infoHidden = true;
+    $(".osumer-info").css("display", "none");
+    $(".search-panel").css("display", "block");
+    $(".footer").css("display", "block");
+    $(".loading-spinner").css("display", "block");
+    $(".loading-spinner").css("opacity", 1);
+    $(".loading-overlay").fadeOut(500);
+    adjustMapListMargin();
+}
 
 $(".view-song-footer .col-sm-3").on("click", function () {
     var id = paras["id"];
@@ -209,6 +213,8 @@ function processUrl() {
     var page = paras["p"];
     var id = paras["id"];
     if (keywords) {
+        hideInfo();
+
         if (Number.isNaN(page)) {
             page = 1;
         }
