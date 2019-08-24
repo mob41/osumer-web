@@ -100,8 +100,6 @@ function adjustMapListMargin() {
     $(".view-song").css("margin-top", hh);
     $(".view-song").css("height", $(window).height() - hh - vsfh);
     $(".osumer-info").css("height", $(window).height());
-    $(".osumer-info .overlay").css("margin-top", nhh);
-    $(".osumer-info .overlay").css("height", $(window).height() - nhh);
     $(".loading-overlay").css("height", $(".map-list").height());
     $(".loading-overlay").css("margin-top", hh);
 }
