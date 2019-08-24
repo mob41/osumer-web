@@ -23,6 +23,23 @@
     <title>osumer</title>
 </head>
 <body>
+    <div class="osumer-info">
+        <div class="overlay"></div>
+        <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+            <source src="video/info.mp4" type="video/mp4">
+        </video>
+        <div class="container h-100">
+            <div class="d-flex h-100 text-center align-items-center">
+                <div class="w-100 text-white">
+                    <h1 class="display-3">osumer2</h1>
+                    <p class="lead mb-0">The express, easiest way to obtain beatmaps.</p>
+                    <p><button class="btn btn-success info-download">Download latest</button> <button class="btn btn-secondary info-release">Release Notes</button></p>
+                    <p class="align-text-bottom">Or, scroll down for searching songs and maps.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row map-list">
         </div>
@@ -57,7 +74,7 @@
     </div>
 
     <div class="header">
-        <nav class="navbar navbar-expand-sm bg-orange navbar-dark">
+        <nav class="navbar navbar-expand-sm bg-trans navbar-dark">
             <a class="navbar-brand" href="?"><img src="img/icon.svg" alt="osumer2" /></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -79,23 +96,6 @@
                 </ul>
             </div>
         </nav>
-
-        <div class="osumer-info">
-            <div class="overlay"></div>
-            <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-                <source src="video/info.mp4" type="video/mp4">
-            </video>
-            <div class="container h-100">
-                <div class="d-flex h-100 text-center align-items-center">
-                    <div class="w-100 text-white">
-                        <h1 class="display-3">osumer2</h1>
-                        <p class="lead mb-0">The express, easiest way to obtain beatmaps.</p>
-                        <p><button class="btn btn-success info-download">Download latest</button> <button class="btn btn-secondary info-release">Release Notes</button></p>
-                        <p class="align-text-bottom">Or, scroll down for searching songs and maps.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="jumbotron jumbotron-fluid search-panel">
             <div class="container-fluid">

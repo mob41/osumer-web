@@ -46,6 +46,8 @@ function hideInfo() {
     $(".footer").css("display", "block");
     $(".loading-spinner").css("display", "block");
     $(".loading-spinner").css("opacity", 1);
+    $(".header nav").addClass("bg-orange");
+    $(".header nav").removeClass("bg-trans");
     $(".loading-overlay").fadeOut(500);
     adjustMapListMargin();
 }
@@ -91,12 +93,16 @@ function about() {
 function adjustMapListMargin() {
     var hh = $(".header").height();
     var fh = $(".footer").height();
+    var nhh = $(".header nav").outerHeight();
     var vsfh = $(".view-song-footer").height();
     $(".map-list").css("margin-top", hh);
     $(".map-list").css("margin-bottom", fh);
     $(".view-song").css("margin-top", hh);
     $(".view-song").css("height", $(window).height() - hh - vsfh);
-    $(".osumer-info").css("height", $(window).height() - $(".header nav").outerHeight());
+    $(".osumer-info").css("height", $(window).height());
+    $(".osumer-info .overlay").css("margin-top", nhh);
+    $(".osumer-info .overlay").css("height", $(window).height() - nhh);
+    $(".loading-overlay").css("height", $(".map-list").height());
     $(".loading-overlay").css("margin-top", hh);
 }
 
@@ -283,13 +289,10 @@ function makeQuery(keywords = false, filters = false, page = 1, success = false)
             currentPage = data.currentPage;
             totalPages = data.totalPages;
             updateUi();
-            if (infoHidden) {
-                $(".loading-overlay").fadeTo(500, 0, function () {
-                    $(this).css("display", "none");
-                });
-            } else {
-                $(".loading-spinner").fadeTo(500, 0);
-            }
+
+            $(".loading-overlay").fadeTo(500, 0, function () {
+                $(this).css("display", "none");
+            });
             
             if (success) {
                 success();

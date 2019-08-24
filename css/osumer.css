@@ -1,3 +1,7 @@
+.bg-trans {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .bg-orange {
     background-color: #ff9900;
 }
@@ -101,7 +105,7 @@
 .osumer-info {
     position: relative;
     background-color: black;
-    height: 720px;
+    height: 100vh;
     min-height: 25rem;
     width: 100%;
     overflow: hidden;
