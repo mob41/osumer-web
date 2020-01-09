@@ -1,4 +1,4 @@
-var endpoint = "https://api.osumer.ml/query";
+var endpoint = "https://api.osumer.tk/query";
 
 var results = [];
 var currentPage = 1;
